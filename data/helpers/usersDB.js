@@ -17,5 +17,5 @@ function loginUser(user) {
 }
 
 function getUsers() {
-  db("users").select("id", "username", "department");
+  return db("users").select("id", "username", "department");
 }
