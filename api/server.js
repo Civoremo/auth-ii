@@ -2,6 +2,7 @@ require("dotenv").config();
 const mwConfig = require("../middleware/middlewareConfig.js");
 const db = require("../data/dbConfig.js");
 const gT = require("../middleware/generateToken.js");
+const protectedMW = require("../middleware/protectedMiddleware.js");
 
 const userDB = require("../data/helpers/usersDB.js");
 
@@ -9,6 +10,7 @@ const server = mwConfig.express();
 const bcrypt = mwConfig.bcrypt;
 const jwt = mwConfig.jwt;
 const generateToken = gT.genToken;
+const protected = protectedMW.protected;
 
 server.use(mwConfig.express.json());
 server.use(mwConfig.helmet());
@@ -44,9 +46,9 @@ server.post("/api/login", (req, res) => {
         const token = generateToken(user);
         res.status(200).json({
           message: `Welcome ${user.username}`,
-          id: user.id,
-          username: user.username,
-          department: user.department,
+          //   id: user.id,
+          //   username: user.username,
+          //   department: user.department,
           token,
         });
       } else {
@@ -57,7 +59,7 @@ server.post("/api/login", (req, res) => {
 });
 
 // get users
-server.get("/api/users", (req, res) => {
+server.get("/api/users", protected, (req, res) => {
   userDB
     .getUsers()
     .then(users => {
