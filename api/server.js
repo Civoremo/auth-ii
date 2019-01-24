@@ -51,9 +51,23 @@ server.post("/api/login", (req, res) => {
 });
 
 // get users
-server.get("/api/users", protected, checkRole("admin"), (req, res) => {
+server.get("/api/users/admin", protected, checkRole("admin"), (req, res) => {
+    console.log(req.decodedToken.department);
     userDB
         .getUsers()
+        .then(users => {
+            res.status(200).json({ users, token: req.decodedToken });
+        })
+        .catch(err => {
+            res.status(500).json(err);
+        });
+});
+
+// get users department
+server.get("/api/users", protected, (req, res) => {
+    // console.log(req.decodedToken.department);
+    userDB
+        .getUsersDep(req.decodedToken.department)
         .then(users => {
             res.status(200).json({ users, token: req.decodedToken });
         })
