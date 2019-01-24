@@ -5,6 +5,7 @@ import axios from "axios";
 
 import SignupForm from "./components/signupForm";
 import LoginForm from './components/loginForm';
+import UsersList from './components/usersList';
 
 class App extends Component {
     constructor(props) {
@@ -92,6 +93,11 @@ class App extends Component {
         }
     }
 
+    logoutUser = e => {
+        localStorage.removeItem('token');
+        window.location.replace('/login');
+    }
+
     render() {
         return (
             <div className="App">
@@ -103,7 +109,7 @@ class App extends Component {
                         <Link to="/login">Login</Link>
                     </div>
                     <div>
-                        <Link to="/">Logout</Link>
+                        <Link to="" onClick={this.logoutUser}>Logout</Link>
                     </div>
                     <div>
                         <Link to="/register">Register</Link>
@@ -133,6 +139,14 @@ class App extends Component {
                                 password={this.state.password}
                                 handleChange={this.handleChange}
                                 login={this.loginUser}
+                            />
+                        )}
+                    />
+                    <Route
+                        path='/users'
+                        render={props => (
+                            <UsersList
+                                {...props}
                             />
                         )}
                     />
