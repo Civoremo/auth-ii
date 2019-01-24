@@ -4,6 +4,7 @@ import "./App.css";
 import axios from "axios";
 
 import SignupForm from "./components/signupForm";
+import LoginForm from './components/loginForm';
 
 class App extends Component {
     constructor(props) {
@@ -49,7 +50,7 @@ class App extends Component {
                         },
                     })
                         .then(token => {
-                            console.log('registered and logged in');
+                            alert('registered and logged in');
                             localStorage.setItem("token", token.data);
                             window.location.replace('/users');
                         })
@@ -66,6 +67,30 @@ class App extends Component {
             );
         }
     };
+
+    loginUser = e => {
+        e.preventDefault();
+        if (this.state.username && this.state.password) {
+            axios({
+                method: 'post',
+                url: 'http://localhost:3600/api/login',
+                data: {
+                    "username": this.state.username,
+                    "password": this.state.password
+                }
+            })
+                .then(token => {
+                    alert('Login successful!');
+                    localStorage.setItem('token', token.data);
+                    window.location.replace('/users');
+                })
+                .catch(err => {
+                    alert(err, 'Could not login, try again');
+                });
+        } else {
+            alert('Please provide username and password!');
+        }
+    }
 
     render() {
         return (
@@ -87,7 +112,6 @@ class App extends Component {
 
                 <div>
                     <Route
-                        exact
                         path="/register"
                         render={props => (
                             <SignupForm
@@ -97,6 +121,18 @@ class App extends Component {
                                 department={this.state.department}
                                 handleChange={this.handleChange}
                                 register={this.registerUser}
+                            />
+                        )}
+                    />
+                    <Route
+                        path='/login'
+                        render={props => (
+                            <LoginForm
+                                {...props}
+                                username={this.state.username}
+                                password={this.state.password}
+                                handleChange={this.handleChange}
+                                login={this.loginUser}
                             />
                         )}
                     />
