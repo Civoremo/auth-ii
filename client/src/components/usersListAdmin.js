@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-class UsersList extends React.Component {
+class UsersListAdmin extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -13,7 +13,7 @@ class UsersList extends React.Component {
     componentDidMount() {
         axios({
             method: "get",
-            url: `http://localhost:3600/api/users`,
+            url: `http://localhost:3600/api/users/admin`,
             headers: {
                 authorization: localStorage.getItem("token"),
             },
@@ -33,9 +33,6 @@ class UsersList extends React.Component {
     }
 
     render() {
-        if (this.state.loggedInUser.department === undefined) {
-            return <></>;
-        }
         console.log(this.state.loggedInUser.department);
         return (
             <div>
@@ -61,4 +58,4 @@ class UsersList extends React.Component {
     }
 }
 
-export default UsersList;
+export default UsersListAdmin;

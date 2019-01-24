@@ -4,8 +4,9 @@ import "./App.css";
 import axios from "axios";
 
 import SignupForm from "./components/signupForm";
-import LoginForm from './components/loginForm';
-import UsersList from './components/usersList';
+import LoginForm from "./components/loginForm";
+import UsersList from "./components/usersList";
+import UsersListAdmin from "./components/usersListAdmin";
 
 class App extends Component {
     constructor(props) {
@@ -29,31 +30,31 @@ class App extends Component {
         e.preventDefault();
         if (
             this.state.username &&
-            this.state.password.length >= 4 &&
+            this.state.password.length >= 6 &&
             this.state.department
         ) {
             axios({
-                method: 'post',
-                url: 'http://localhost:3600/api/register',
+                method: "post",
+                url: `${process.env.REACT_APP_API_URL}/api/register`,
                 data: {
-                    "username": this.state.username,
-                    "password": this.state.password,
-                    "department": this.state.department,
-                }
+                    username: this.state.username,
+                    password: this.state.password,
+                    department: this.state.department,
+                },
             })
                 .then(id => {
                     axios({
                         method: "post",
-                        url: "http://localhost:3600/api/login",
+                        url: `${process.env.REACT_APP_API_URL}/api/login`,
                         data: {
-                            "username": this.state.username,
-                            "password": this.state.password,
+                            username: this.state.username,
+                            password: this.state.password,
                         },
                     })
                         .then(token => {
-                            alert('registered and logged in');
+                            alert("registered and logged in");
                             localStorage.setItem("token", token.data);
-                            window.location.replace('/users');
+                            window.location.replace("/users");
                         })
                         .catch(err => {
                             alert(err, "Could not login");
@@ -73,30 +74,30 @@ class App extends Component {
         e.preventDefault();
         if (this.state.username && this.state.password) {
             axios({
-                method: 'post',
-                url: 'http://localhost:3600/api/login',
+                method: "post",
+                url: "http://localhost:3600/api/login",
                 data: {
-                    "username": this.state.username,
-                    "password": this.state.password
-                }
+                    username: this.state.username,
+                    password: this.state.password,
+                },
             })
                 .then(token => {
-                    alert('Login successful!');
-                    localStorage.setItem('token', token.data);
-                    window.location.replace('/users');
+                    alert("Login successful!");
+                    localStorage.setItem("token", token.data);
+                    window.location.replace("/users");
                 })
                 .catch(err => {
-                    alert(err, 'Could not login, try again');
+                    alert(err, "Could not login, try again");
                 });
         } else {
-            alert('Please provide username and password!');
+            alert("Please provide username and password!");
         }
-    }
+    };
 
     logoutUser = e => {
-        localStorage.removeItem('token');
-        window.location.replace('/login');
-    }
+        localStorage.removeItem("token");
+        window.location.replace("/login");
+    };
 
     render() {
         return (
@@ -109,10 +110,15 @@ class App extends Component {
                         <Link to="/login">Login</Link>
                     </div>
                     <div>
-                        <Link to="" onClick={this.logoutUser}>Logout</Link>
+                        <Link to="" onClick={this.logoutUser}>
+                            Logout
+                        </Link>
                     </div>
                     <div>
                         <Link to="/register">Register</Link>
+                    </div>
+                    <div>
+                        <Link to="/users/admin">Admin</Link>
                     </div>
                 </nav>
 
@@ -131,7 +137,7 @@ class App extends Component {
                         )}
                     />
                     <Route
-                        path='/login'
+                        path="/login"
                         render={props => (
                             <LoginForm
                                 {...props}
@@ -143,12 +149,13 @@ class App extends Component {
                         )}
                     />
                     <Route
-                        path='/users'
-                        render={props => (
-                            <UsersList
-                                {...props}
-                            />
-                        )}
+                        exact
+                        path="/users"
+                        render={props => <UsersList {...props} />}
+                    />
+                    <Route
+                        path="/users/admin"
+                        render={props => <UsersListAdmin {...props} />}
                     />
                 </div>
             </div>
