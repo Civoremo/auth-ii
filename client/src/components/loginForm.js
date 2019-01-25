@@ -1,11 +1,10 @@
-import React from 'react';
+import React from "react";
 
 class LoginForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {};
     }
-
 
     render() {
         return (
@@ -15,20 +14,20 @@ class LoginForm extends React.Component {
                     <input
                         type="text"
                         onChange={this.props.handleChange}
-                        placeholder='username'
-                        name='username'
+                        placeholder="username"
+                        name="username"
                         value={this.props.username}
                         required={true}
-                        autoComplete='false'
+                        autoComplete="false"
                     />
                     <input
-                        type="text"
+                        type="password"
                         onChange={this.props.handleChange}
-                        placeholder='password'
-                        name='password'
+                        placeholder="password"
+                        name="password"
                         value={this.props.password}
                         required={true}
-                        autoComplete='false'
+                        autoComplete="false"
                     />
                 </form>
                 <button onClick={this.props.login}>Login</button>

@@ -23,52 +23,14 @@ class App extends Component {
         this.setState({
             [e.target.name]: e.target.value,
         });
-        console.log(this.state);
+        // console.log(this.state);
     };
 
-    registerUser = e => {
-        e.preventDefault();
-        if (
-            this.state.username &&
-            this.state.password.length >= 6 &&
-            this.state.department
-        ) {
-            axios({
-                method: "post",
-                url: `${process.env.REACT_APP_API_URL}/api/register`,
-                data: {
-                    username: this.state.username,
-                    password: this.state.password,
-                    department: this.state.department,
-                },
-            })
-                .then(id => {
-                    axios({
-                        method: "post",
-                        url: `${process.env.REACT_APP_API_URL}/api/login`,
-                        data: {
-                            username: this.state.username,
-                            password: this.state.password,
-                        },
-                    })
-                        .then(token => {
-                            alert("registered and logged in");
-                            localStorage.setItem("token", token.data);
-                            window.location.replace("/users");
-                        })
-                        .catch(err => {
-                            alert(err, "Could not login");
-                        });
-                })
-                .catch(err => {
-                    alert(err, "could not register");
-                });
-        } else {
-            alert(
-                "Provide username, password with at least 6 characters and the department!"
-            );
-        }
-    };
+    optionPicked(opt) {
+        this.setState({
+            department: opt,
+        });
+    }
 
     loginUser = e => {
         e.preventDefault();
@@ -133,6 +95,7 @@ class App extends Component {
                                 department={this.state.department}
                                 handleChange={this.handleChange}
                                 register={this.registerUser}
+                                optionPicked={this.optionPicked}
                             />
                         )}
                     />

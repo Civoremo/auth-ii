@@ -36,10 +36,7 @@ class UsersListAdmin extends React.Component {
         console.log(this.state.loggedInUser.department);
         return (
             <div>
-                <h2>
-                    List of users in the{" "}
-                    {`"${this.state.loggedInUser.department}"`} department.
-                </h2>
+                <h2>{`"${this.state.loggedInUser.department}"`} access.</h2>
                 {this.state.users.map(user => {
                     return (
                         <div key={user.id}>
